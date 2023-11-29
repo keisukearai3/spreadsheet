@@ -4,10 +4,8 @@ import { FcApproval } from 'react-icons/fc';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { RiMailSendLine } from 'react-icons/ri';
 import dayjs from 'dayjs';
-import { appendSpreadsheetEx } from './api/spreadsheet';
 
 // Config variables
-const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_EMAIL = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_EMAIL;
 const GOOGLE_CLIENT_PRIVATE_KEY = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_PRIVATE_KEY;
 const SPREADSHEET_ID = process.env.NEXT_PUBLIC_SPREADSHEET_ID;
@@ -23,27 +21,24 @@ const ContactForm = () => {
     description: '',
   });
 
-  // const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
-
   const appendSpreadsheet = async (row) => {
 
     const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
-
-    // console.log(doc);
-    // console.log(GOOGLE_CLIENT_EMAIL);
-    // console.log(GOOGLE_CLIENT_PRIVATE_KEY);
     setLoading(true);
     console.log("1");
+
     try {
       await doc.useServiceAccountAuth({
         client_email: GOOGLE_CLIENT_EMAIL,
         private_key: GOOGLE_CLIENT_PRIVATE_KEY.replace(/\\n/g, '\n'),
       });
-      console.log("1-1");
+
+      console.log("2");
+
       // loads document properties and worksheets
       await doc.loadInfo();
 
-      console.log("2");
+      console.log("3");
 
       const sheet = doc.sheetsById[SHEET_ID];
       await sheet.addRow(row);
@@ -56,7 +51,7 @@ const ContactForm = () => {
         description: '',
       });
     } catch (e) {
-      console.log("3");
+      console.log("4");
       console.error('Error: ', e);
       setLoading(false);
     }
@@ -64,7 +59,6 @@ const ContactForm = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    // console.log(req);
 
     if (
       form.name !== '' &&
@@ -80,7 +74,6 @@ const ContactForm = () => {
         Date: dayjs().format('DD MMMM YYYY hh:mm:ss A'),
       };
       appendSpreadsheet(newRow);
-      // appendSpreadsheetEx(newRow);
     }
   };
 
